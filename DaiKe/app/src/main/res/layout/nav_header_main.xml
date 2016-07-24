@@ -15,7 +15,7 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <com.wyf.daike.Util.CircleImageView
-        android:id="@+id/imageView"
+        android:id="@+id/cardImage"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:src="@drawable/ly"
