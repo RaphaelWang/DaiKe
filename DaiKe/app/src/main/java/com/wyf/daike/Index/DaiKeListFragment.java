@@ -1,9 +1,12 @@
 package com.wyf.daike.Index;
 
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.net.ConnectivityManagerCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,14 +15,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TabHost;
 import android.widget.Toast;
 
 import com.wyf.daike.Adapter.IndexAdapter;
 import com.wyf.daike.Bean.IndexCard;
 import com.wyf.daike.R;
+import com.wyf.daike.global.MyApplication;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.jar.Manifest;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,7 +41,7 @@ public class DaiKeListFragment extends Fragment implements SwipeRefreshLayout.On
     public SwipeRefreshLayout mSwipeRefreshLayout;
     List<IndexCard> cardData;
     private IndexContract.Presenter presenter;
-
+    private   LinearLayoutManager manager;
 
 
     @Override
@@ -55,28 +61,58 @@ public class DaiKeListFragment extends Fragment implements SwipeRefreshLayout.On
 
         new IndexPresenter(this);
 
-        Log.d("TAG", "onCreateView: ");
+
         init();
         showDialog();
         onRefresh();
         return view;
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
     private void init() {
 
-
+        //设置SwipRefreshLayout
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
         mSwipeRefreshLayout.setProgressViewOffset(false, 100, 300);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+
+        //设置RecyclerView
+         manager = new LinearLayoutManager(mContext);
+        mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setHasFixedSize(true);
-
-
-        mRecyclerView.setHasFixedSize(true);
-
-        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mRecyclerView.addOnScrollListener(onScrollListener);
+        cardData = new ArrayList<IndexCard>();
+        indexAdapter =  new IndexAdapter(getActivity().getApplicationContext(),cardData);
+        mRecyclerView.setAdapter(indexAdapter);
         new IndexPresenter(this);
     }
+
+    /****
+     * 下拉加载更多的
+     *
+     */
+
+    private  RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
+        int lastVisible;
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+
+            if((newState==RecyclerView.SCROLL_STATE_IDLE)&&(lastVisible+1)==indexAdapter.getItemCount())
+            {
+                presenter.loadData();
+            }
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            lastVisible = manager.findLastVisibleItemPosition();
+
+        }
+    };
+
 
 
     public void hideDialog() {
@@ -88,11 +124,10 @@ public class DaiKeListFragment extends Fragment implements SwipeRefreshLayout.On
     }
 
     @Override
-    public void loadFailed() {
-        hideDialog();
-        Toast.makeText(mContext, "加载失败", Toast.LENGTH_SHORT).show();
+    public void loadFailed(int code) {
 
     }
+
 
     /**
      *
@@ -101,10 +136,10 @@ public class DaiKeListFragment extends Fragment implements SwipeRefreshLayout.On
      */
     @Override
     public void loadCompleted(List cardData) {
-        this.cardData = cardData;
+
         hideDialog();
-        indexAdapter =  new IndexAdapter(getActivity().getApplicationContext(),cardData);
-        mRecyclerView.setAdapter(indexAdapter);
+
+        this.cardData.addAll(cardData);
         indexAdapter.notifyDataSetChanged();
     }
 

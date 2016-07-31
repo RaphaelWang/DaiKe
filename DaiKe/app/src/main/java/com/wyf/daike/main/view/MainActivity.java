@@ -67,9 +67,11 @@ public class MainActivity extends AppCompatActivity
         nav_view.setOnClickListener(this);
         drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer_layout.setOnClickListener(this);
+    }
 
-
-
+    void  setToolbarTitle(String title)
+    {
+        getSupportActionBar().setTitle(title);
     }
 
     /***

@@ -1,6 +1,7 @@
 package com.wyf.daike.Adapter;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,10 +24,22 @@ import java.util.List;
  */
 public class IndexAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    Context mContext;
-   List<IndexCard> cardData;
+    private  Context mContext;
+    private  List<IndexCard> cardData;
+    private final int  TYPE_ITEM=0;
+    private final int  TYPE_FOOTER=1;
+    private final int  TYPE_NO_MORE=2;
 
-    public IndexAdapter(Context context,List<IndexCard> cardData) {
+
+    @Override
+    public int getItemViewType(int position) {
+//        super.getItemViewType(position);
+        if(position+1==getItemCount())
+            return TYPE_FOOTER;
+        return TYPE_ITEM;
+    }
+
+    public IndexAdapter(Context context, List<IndexCard> cardData) {
         mContext = context;
         this.cardData = cardData;
 
@@ -35,37 +48,53 @@ public class IndexAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardlist, parent, false);
-        MyViewHolder viewHolder = new MyViewHolder(view);
+        if(viewType==TYPE_ITEM)
+        {
 
-        return  viewHolder;
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardlist, parent, false);
+            MyViewHolder viewHolder = new MyViewHolder(view);
+
+            return  viewHolder;
+        }
+        else {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardviewloading, parent, false);
+          //  MyViewHolder viewHolder = new MyViewHolder(view);
+
+            return  new ItemFooter(view);
+        }
+
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        IndexCard  indexCard = cardData.get(position);
-        if(indexCard==null)
+        if(holder instanceof MyViewHolder)
         {
-            Log.d("wyf", "onBindViewHolder: "+"数据为空");
-            return;
+            IndexCard  indexCard = cardData.get(position);
+            if(indexCard==null)
+            {
+                return;
+            }
+
+            ((MyViewHolder)holder).cardTitle.setText(indexCard.getCardTitle());
+            ((MyViewHolder)holder).cardClassroom.setText(indexCard.getCardClassroom());
+
+            Glide.with(mContext).load(indexCard.getCardImageUrl()).placeholder(R.drawable.ic_image_loading)
+                    .error(R.drawable.ly).into(((MyViewHolder)holder).cardImage);
+            ((MyViewHolder)holder).cardMoney.setText(indexCard.getCardMoney());
+            ((MyViewHolder)holder).cardSubject.setText(indexCard.getCardSubect());
+            ((MyViewHolder)holder).cardTime.setText(indexCard.getCreatedAt());
+
         }
-        Log.d("wyf", "onBindViewHolder: "+"数据不为空");
-        ((MyViewHolder)holder).cardTitle.setText(indexCard.getCardTitle());
-        ((MyViewHolder)holder).cardClassroom.setText(indexCard.getCardClassroom());
-        Glide.with(MyApplication.getContext()).load(indexCard.getCardImageUrl()).into(((MyViewHolder)holder).cardImage);
-        Glide.with(mContext).load(indexCard.getCardImageUrl()).placeholder(R.drawable.ic_image_loading)
-                .error(R.drawable.ic_image_loadfail).into(((MyViewHolder)holder).cardImage);
-        ((MyViewHolder)holder).cardMoney.setText(indexCard.getCardMoney());
-        ((MyViewHolder)holder).cardSubject.setText(indexCard.getCardSubect());
-        ((MyViewHolder)holder).cardTime.setText(indexCard.getTime());
 
 
     }
 
     @Override
     public int getItemCount() {
-        return cardData.size();
+        if(cardData.isEmpty())
+          return 1;
+        return cardData.size()+1 ;
     }
 
 
@@ -88,6 +117,14 @@ public class IndexAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             this.cardTime = (TextView) rootView.findViewById(R.id.cardTime);
             this.cardMoney = (TextView) rootView.findViewById(R.id.cardMoney);
         }
+
+    }
+
+    public  static  class  ItemFooter extends RecyclerView.ViewHolder {
+        public ItemFooter(View itemView) {
+            super(itemView);
+        }
+
 
     }
 }

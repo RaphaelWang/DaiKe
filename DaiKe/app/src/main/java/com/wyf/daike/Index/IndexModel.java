@@ -34,6 +34,8 @@ public class IndexModel {
     {
 
         BmobQuery<IndexCard> query = new BmobQuery<IndexCard>();
+//        query.setLimit(5);
+//        query.setSkip(5);
         query.findObjects(new FindListener<IndexCard>()
         {
             @Override
@@ -44,13 +46,12 @@ public class IndexModel {
                 {
                     cardData =object;
                     for(int i=0;i<cardData.size();i++)
-                    Log.d("wyf", "done: "+cardData.get(i).getCardTitle());
+                    Log.d("wyf", "done: "+"成功下载"+cardData.size()+"条数据");
                     presenter.setCardContent(cardData);
-
-
-
-                }else{
-                   presenter.loadFailed(flag);
+                }
+                else{
+                   presenter.loadFailed(e.getErrorCode());
+                    Log.d("wyf", "done: "+"数据下载失败");
                 }
             }
         });

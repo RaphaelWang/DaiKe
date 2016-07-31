@@ -32,14 +32,15 @@ public class IndexPresenter  implements IndexContract.Presenter {
     }
 
     @Override
-    public void loadFailed(boolean loadState) {
-        view.loadFailed();
+    public void loadFailed(int code) {
+        view.loadFailed(code);
     }
 
     @Override
     public void loadMore() {
 
     }
+
 
     @Override
     public void start() {

@@ -15,8 +15,8 @@
         android:layout_height="match_parent"
         >
     <com.wyf.daike.Util.CircleImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:id="@+id/cardImage"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
@@ -28,58 +28,67 @@
 
     <TextView
         android:layout_width="200dp"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:text="请帮忙带上语言课，谢帮忙带上语555555555555555555555555555555555言课！"
         android:id="@+id/cardTitle"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="15dp"
         android:layout_alignTop="@+id/cardImage"
         android:layout_toRightOf="@+id/cardImage"
-        android:textSize="17sp" />
+        android:textSize="18sp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+         android:maxLines="2"
+        android:layout_marginTop="10dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
-        android:layout_width="90dp"
+        android:layout_width="150dp"
         android:layout_height="20dp"
         android:text="语文"
+        android:singleLine="true"
         android:id="@+id/cardSubject"
         android:textSize="14sp"
-        android:layout_alignBottom="@+id/cardImage"
+
         android:layout_alignLeft="@+id/cardTitle"
-        android:layout_alignStart="@+id/cardTitle" />
+        android:layout_alignStart="@+id/cardTitle"
+        android:layout_marginTop="70dp" />
 
     <TextView
-        android:layout_width="90dp"
+        android:layout_width="150dp"
         android:layout_height="20dp"
         android:text="博学楼D399"
+        android:singleLine="true"
         android:id="@+id/cardClassroom"
         android:textSize="14sp"
-        android:layout_marginLeft="10dp"
-        android:layout_alignTop="@+id/cardSubject"
-        android:layout_toRightOf="@+id/cardSubject"
-        android:layout_toEndOf="@+id/cardSubject" />
+        android:layout_alignBottom="@+id/cardImage"
+        android:layout_alignLeft="@+id/cardSubject"
+        android:layout_alignStart="@+id/cardSubject" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="70dp"
         android:layout_height="wrap_content"
         android:text="6月4日"
         android:id="@+id/cardTime"
-        android:layout_below="@+id/cardTitle"
-        android:layout_alignRight="@+id/cardMoney"
-        android:layout_alignEnd="@+id/cardMoney"
-        android:textSize="12sp" />
+        android:singleLine="true"
+        android:textSize="12sp"
+        android:layout_alignTop="@+id/cardClassroom"
+        android:layout_alignParentRight="false"
+        android:layout_alignParentEnd="true"
+        android:gravity="right" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:text="￥20"
         android:id="@+id/cardMoney"
-        android:textStyle="bold"
         android:textSize="16sp"
+        android:singleLine="true"
 
-        android:layout_marginTop="10dp"
-
+        android:gravity="right"
+        android:layout_alignTop="@+id/cardSubject"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2" />
 
     </RelativeLayout>
 

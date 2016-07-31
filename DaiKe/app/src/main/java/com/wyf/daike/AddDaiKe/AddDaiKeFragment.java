@@ -41,6 +41,7 @@ public class AddDaiKeFragment extends Fragment implements AddDaiKeContract.View,
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        getActivity().setTitle("发布代课信息");
         View rootView = inflater.inflate(R.layout.fragment_add_dai_ke, container, false);
         initView(rootView);
 
