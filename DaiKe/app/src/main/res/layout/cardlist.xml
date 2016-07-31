@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:layout_width="match_parent"
+<android.support.v7.widget.CardView android:layout_width="match_parent"
     android:layout_height="120dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp"
-
-    android:background="#ffffff">
-
-
+    xmlns:card_view="http://schemas.android.com/tools"
+    app:contentPaddingLeft="8dp"
+    app:contentPaddingRight="8dp"
+    android:layout_marginTop="8dp"
+    card_view:cardBackgroundColor="@color/colorAccent"
+    card_view:cardCornerRadius="16dp"
+>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
     <com.wyf.daike.Util.CircleImageView
         android:layout_width="80dp"
         android:layout_height="80dp"
@@ -69,10 +74,13 @@
         android:text="￥20"
         android:id="@+id/cardMoney"
         android:textStyle="bold"
-        android:textSize="18sp"
-        android:textColor="@android:color/holo_orange_light"
+        android:textSize="16sp"
 
         android:layout_marginTop="10dp"
+
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
-</RelativeLayout>
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
