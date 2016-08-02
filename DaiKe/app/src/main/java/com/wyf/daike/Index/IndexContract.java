@@ -18,7 +18,7 @@ public interface IndexContract {
     }
     public  interface Presenter extends BasePresenter{
 
-        public void loadData() ;
+        public void loadData(int cardTotal) ;
         public void setCardContent(List cardData);
         public void loadFailed(int errorCode);
         public void loadMore();

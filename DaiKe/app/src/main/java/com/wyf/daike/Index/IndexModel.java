@@ -4,6 +4,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.wyf.daike.Bean.IndexCard;
+import com.wyf.daike.global.Config;
 import com.wyf.daike.global.MyApplication;
 import java.util.List;
 
@@ -30,12 +31,12 @@ public class IndexModel {
     }
 
 
-    public  void loadData()
+    public  void loadData(int cardNumber)
     {
 
         BmobQuery<IndexCard> query = new BmobQuery<IndexCard>();
-//        query.setLimit(5);
-//        query.setSkip(5);
+        query.setLimit(Config.ONE_TIME_LOAD_NUMBER);
+        query.setSkip(cardNumber);
         query.findObjects(new FindListener<IndexCard>()
         {
             @Override

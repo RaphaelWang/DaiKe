@@ -20,8 +20,8 @@ public class IndexPresenter  implements IndexContract.Presenter {
         this.model = model;
     }
     @Override
-    public void loadData() {
-        model.loadData();
+    public void loadData(int cardNumber) {
+        model.loadData(cardNumber);
 
     }
 

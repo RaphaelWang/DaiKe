@@ -11,6 +11,7 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.wyf.daike.AddDaiKe.AddDaiKeContract;
 import com.wyf.daike.Bean.IndexCard;
 import com.wyf.daike.R;
 import com.wyf.daike.Util.CircleImageView;
@@ -29,12 +30,22 @@ public class IndexAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private final int  TYPE_ITEM=0;
     private final int  TYPE_FOOTER=1;
     private final int  TYPE_NO_MORE=2;
+    private static boolean showFooter=false;
 
+
+    public  boolean isShowFooter()
+    {
+       return this.showFooter;
+    }
+    public void setShowFooter(boolean showFooter)
+    {
+        this.showFooter = showFooter;
+    }
 
     @Override
     public int getItemViewType(int position) {
 //        super.getItemViewType(position);
-        if(position+1==getItemCount())
+        if(position+1==getItemCount()&&showFooter)
             return TYPE_FOOTER;
         return TYPE_ITEM;
     }
@@ -80,7 +91,7 @@ public class IndexAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             ((MyViewHolder)holder).cardClassroom.setText(indexCard.getCardClassroom());
 
             Glide.with(mContext).load(indexCard.getCardImageUrl()).placeholder(R.drawable.ic_image_loading)
-                    .error(R.drawable.ly).into(((MyViewHolder)holder).cardImage);
+                    .error(R.mipmap.ic_launcher).into(((MyViewHolder)holder).cardImage);
             ((MyViewHolder)holder).cardMoney.setText(indexCard.getCardMoney());
             ((MyViewHolder)holder).cardSubject.setText(indexCard.getCardSubect());
             ((MyViewHolder)holder).cardTime.setText(indexCard.getCreatedAt());
@@ -88,13 +99,13 @@ public class IndexAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
 
 
+
     }
 
     @Override
     public int getItemCount() {
-        if(cardData.isEmpty())
-          return 1;
-        return cardData.size()+1 ;
+
+        return showFooter?cardData.size()+1:cardData.size();
     }
 
 

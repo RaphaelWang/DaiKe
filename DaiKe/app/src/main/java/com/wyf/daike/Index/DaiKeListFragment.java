@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.net.ConnectivityManagerCompat;
+import android.support.v4.net.TrafficStatsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import com.wyf.daike.Adapter.IndexAdapter;
 import com.wyf.daike.Bean.IndexCard;
 import com.wyf.daike.R;
+import com.wyf.daike.global.Config;
 import com.wyf.daike.global.MyApplication;
 
 import java.util.ArrayList;
@@ -42,6 +44,9 @@ public class DaiKeListFragment extends Fragment implements SwipeRefreshLayout.On
     List<IndexCard> cardData;
     private IndexContract.Presenter presenter;
     private   LinearLayoutManager manager;
+    private static  int cardTotal=0;
+    private boolean loadContentEmpty =true;
+
 
 
     @Override
@@ -89,7 +94,7 @@ public class DaiKeListFragment extends Fragment implements SwipeRefreshLayout.On
     }
 
     /****
-     * 下拉加载更多的
+     * 监听上拉动作，上拉加载更多,
      *
      */
 
@@ -99,10 +104,14 @@ public class DaiKeListFragment extends Fragment implements SwipeRefreshLayout.On
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
             super.onScrollStateChanged(recyclerView, newState);
 
-            if((newState==RecyclerView.SCROLL_STATE_IDLE)&&(lastVisible+1)==indexAdapter.getItemCount())
+            if((newState==RecyclerView.SCROLL_STATE_IDLE)&&(lastVisible+1)==
+                    indexAdapter.getItemCount()&&indexAdapter.isShowFooter())
             {
-                presenter.loadData();
+
+                presenter.loadData(cardTotal);
+                cardTotal+= Config.ONE_TIME_LOAD_NUMBER;
             }
+
         }
 
         @Override
@@ -139,7 +148,24 @@ public class DaiKeListFragment extends Fragment implements SwipeRefreshLayout.On
 
         hideDialog();
 
-        this.cardData.addAll(cardData);
+
+        indexAdapter.setShowFooter(true);
+
+        if(cardData.isEmpty())
+        {
+            indexAdapter.setShowFooter(false);
+            indexAdapter.notifyDataSetChanged();
+            return;
+        }
+//        if((this.cardData).size()<=manager.findLastVisibleItemPosition())
+//        {
+//            indexAdapter.setShowFooter(false);
+//            indexAdapter.notifyDataSetChanged();
+//            return;
+//        }
+        if(!cardData.isEmpty())
+            this.cardData.addAll(cardData);
+        indexAdapter.setShowFooter(true);
         indexAdapter.notifyDataSetChanged();
     }
 
@@ -153,12 +179,29 @@ public class DaiKeListFragment extends Fragment implements SwipeRefreshLayout.On
 
     @Override
     public void onRefresh() {
-        presenter.loadData();
+        cardTotal = 0;
+        if(cardData!=null)
+            cardData.clear();
+        presenter.loadData(cardTotal);
+        cardTotal =Config.ONE_TIME_LOAD_NUMBER;
+
     }
 
 
     @Override
     public void setPresenter(IndexContract.Presenter persenter) {
             this.presenter=persenter;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        cardData.clear();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        cardData.clear();
     }
 }
