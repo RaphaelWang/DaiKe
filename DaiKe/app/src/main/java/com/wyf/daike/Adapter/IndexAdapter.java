@@ -30,7 +30,7 @@ public class IndexAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private final int  TYPE_ITEM=0;
     private final int  TYPE_FOOTER=1;
     private final int  TYPE_NO_MORE=2;
-    private static boolean showFooter=false;
+    private static boolean showFooter=true;
 
 
     public  boolean isShowFooter()
@@ -44,7 +44,7 @@ public class IndexAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemViewType(int position) {
-//        super.getItemViewType(position);
+
         if(position+1==getItemCount()&&showFooter)
             return TYPE_FOOTER;
         return TYPE_ITEM;
@@ -64,15 +64,15 @@ public class IndexAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardlist, parent, false);
             MyViewHolder viewHolder = new MyViewHolder(view);
-
             return  viewHolder;
         }
-        else {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardviewloading, parent, false);
-          //  MyViewHolder viewHolder = new MyViewHolder(view);
 
+        else
+         {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardviewloading, parent, false);
             return  new ItemFooter(view);
         }
+
 
     }
 
@@ -104,6 +104,10 @@ public class IndexAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemCount() {
+//        if(cardData.size()==1)
+//        {
+//            return 0;
+//        }
 
         return showFooter?cardData.size()+1:cardData.size();
     }

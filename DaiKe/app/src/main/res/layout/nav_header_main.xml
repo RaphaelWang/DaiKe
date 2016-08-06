@@ -15,13 +15,14 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <com.wyf.daike.Util.CircleImageView
-        android:id="@+id/cardImage"
+        android:id="@+id/imageTouXiang"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:src="@drawable/ly"
         android:layout_gravity="center"
         app:border_width="2dp"
-        app:border_color="@color/white"
+        android:clickable="true"
+        app:border_color="#ffffff"
 
         />
 

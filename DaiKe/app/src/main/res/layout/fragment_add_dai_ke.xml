@@ -1,53 +1,134 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp"
+    android:padding="8dp"
+    android:scrollbars="none"
     tools:context="com.wyf.daike.AddDaiKe.AddDaiKeFragment">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:weightSum="1">
 
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="61dp"
-        android:id="@+id/editTitle"
-        android:layout_gravity="center_horizontal"
-        android:hint="标题" />
-
-    <EditText
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/editSubject"
-        android:hint="课程"
-        android:layout_gravity="center_horizontal" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/editPrice"
-        android:hint="价格"
-        android:layout_gravity="center_horizontal" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/editClassroom"
-        android:hint="教室"
-        android:layout_gravity="center_horizontal" />
-
-    <Button
-        android:layout_width="221dp"
-        android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/button"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="0.04" />
-
-</LinearLayout>
+        android:background="@drawable/bg_edit_daike_submit"
+        android:orientation="vertical"
+        android:padding="10dp"
+        >
 
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:maxLength="20"
+            android:text="标题"
+            android:textSize="24sp" />
+
+        <EditText
+            android:id="@+id/editTitle"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:maxEms="20"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/bg_edittext"
+            android:paddingLeft="3dp" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="课程"
+                android:textSize="24sp" />
+
+            <EditText
+                android:id="@+id/editSubject"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="8dp"
+                android:maxLength="10"
+                android:background="@drawable/bg_edittext"
+                android:paddingLeft="3dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="价格"
+                android:textSize="24sp"
+
+
+                />
+
+            <EditText
+                android:id="@+id/editPrice"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:inputType="number"
+                android:maxLength="3"
+                android:layout_marginLeft="8dp"
+                android:background="@drawable/bg_edittext"
+                android:paddingLeft="3dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="地点"
+                android:textSize="24sp"
+
+
+                />
+
+            <EditText
+                android:id="@+id/editClassroom"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="8dp"
+                android:maxLength="10"
+                android:background="@drawable/bg_edittext"
+                android:paddingLeft="3dp"
+                android:imeOptions="actionPrevious"
+                android:privateImeOptions="@+id/editPrice"
+                />
+
+        </LinearLayout>
+
+        <Button
+            android:layout_marginTop="25dp"
+            android:id="@+id/btnSubmit"
+            android:layout_width="221dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/selector_button_style01"
+
+            android:text="提交" />
+
+    </LinearLayout>
+
+
+</ScrollView>

@@ -1,9 +1,12 @@
 package com.wyf.daike.main.view;
 
+import android.app.ActionBar;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -14,27 +17,34 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TabHost;
 
 import com.wyf.daike.AddDaiKe.AddDaiKeFragment;
 import com.wyf.daike.Index.DaiKeListFragment;
+import com.wyf.daike.Login.LoginActivity;
+import com.wyf.daike.MyInfo.MyInfoActivity;
 import com.wyf.daike.R;
+import com.wyf.daike.Util.CircleImageView;
 
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobUser;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private Toolbar toolbar;
     private FrameLayout mainFrameLayout;
-    private FloatingActionButton fab;
+    private   FloatingActionButton fab;
     private NavigationView nav_view;
     private DrawerLayout drawer_layout;
+    private CircleImageView circleImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Bmob.initialize(this, "4772582cf6fe2d0e7aa5b4b3ec251119");
+
+
 
 
         initView();
@@ -48,16 +58,27 @@ public class MainActivity extends AppCompatActivity
      */
     private void initView() {
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
+
+
+
+
+
+        View headerView = navigationView.inflateHeaderView(R.layout.nav_header_main);
+        circleImageView  = (CircleImageView) headerView.findViewById(R.id.imageTouXiang);
        // toolbar.setOnClickListener(this);
         //mainFrameLayout = (FrameLayout) findViewById(R.id.mainFrameLayout);
       //  mainFrameLayout.setOnClickListener(this);
@@ -67,29 +88,30 @@ public class MainActivity extends AppCompatActivity
         nav_view.setOnClickListener(this);
         drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer_layout.setOnClickListener(this);
+        circleImageView.setOnClickListener(this);
     }
 
-    void  setToolbarTitle(String title)
-    {
-        getSupportActionBar().setTitle(title);
-    }
 
     /***
      *
      * 打开主页的fragment
      */
 
-    private void switchDaiKeList() {
+    public void switchDaiKeList() {
           getSupportFragmentManager().beginTransaction().replace(R.id.mainFrameLayout,new DaiKeListFragment()).commit();
+//          getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 
     @Override
     public void onBackPressed() {
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        Log.d("wyf", "onBackPressed:Fragemt数量"+getSupportFragmentManager().getFragments().size());
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        }
+        else {
             super.onBackPressed();
         }
     }
@@ -145,10 +167,35 @@ public class MainActivity extends AppCompatActivity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab:
-                getSupportFragmentManager().beginTransaction().replace(R.id.mainFrameLayout,
-                        new AddDaiKeFragment()).commit();
+                BmobUser myUser =  BmobUser.getCurrentUser();
+                if (myUser== null) {
+                    startActivity(new Intent(this, LoginActivity.class));
+                    Snackbar.make(v,"请先登录",Snackbar.LENGTH_SHORT).show();
+                }
 
+
+                getSupportFragmentManager().beginTransaction().replace(R.id.mainFrameLayout,
+                        new AddDaiKeFragment()).addToBackStack(null).commit();
+
+
+                break;
+            case R.id.imageTouXiang:
+                startActivity(new Intent(this, MyInfoActivity.class));
                 break;
         }
     }
+
+    public void  setFloatingActionButton(boolean state)
+    {
+        if(state)
+        {
+            fab.setVisibility(View.VISIBLE);
+        }
+        else {
+            fab.setVisibility(View.GONE);
+        }
+
+    }
+
+
 }

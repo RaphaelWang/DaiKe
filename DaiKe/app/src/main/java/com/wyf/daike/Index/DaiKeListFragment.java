@@ -24,6 +24,7 @@ import com.wyf.daike.Bean.IndexCard;
 import com.wyf.daike.R;
 import com.wyf.daike.global.Config;
 import com.wyf.daike.global.MyApplication;
+import com.wyf.daike.main.view.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +60,7 @@ public class DaiKeListFragment extends Fragment implements SwipeRefreshLayout.On
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_dai_ke_list, container, false);
         mRecyclerView = (RecyclerView)view.findViewById(R.id.mRecyclerView);
         mSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.mSwipeRefreshLayout);
@@ -75,6 +76,11 @@ public class DaiKeListFragment extends Fragment implements SwipeRefreshLayout.On
 
     @TargetApi(Build.VERSION_CODES.M)
     private void init() {
+
+
+        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.setFloatingActionButton(true);
+        mainActivity.setTitle("代课");
 
         //设置SwipRefreshLayout
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
@@ -151,18 +157,13 @@ public class DaiKeListFragment extends Fragment implements SwipeRefreshLayout.On
 
         indexAdapter.setShowFooter(true);
 
-        if(cardData.isEmpty())
+        if(cardData.size()==0&&cardTotal!=0)
         {
             indexAdapter.setShowFooter(false);
             indexAdapter.notifyDataSetChanged();
             return;
         }
-//        if((this.cardData).size()<=manager.findLastVisibleItemPosition())
-//        {
-//            indexAdapter.setShowFooter(false);
-//            indexAdapter.notifyDataSetChanged();
-//            return;
-//        }
+
         if(!cardData.isEmpty())
             this.cardData.addAll(cardData);
         indexAdapter.setShowFooter(true);
@@ -180,10 +181,28 @@ public class DaiKeListFragment extends Fragment implements SwipeRefreshLayout.On
     @Override
     public void onRefresh() {
         cardTotal = 0;
-        if(cardData!=null)
+
+        if(cardData.size()==0)
+        {
+            indexAdapter.setShowFooter(false);
+            indexAdapter.notifyDataSetChanged();
+        }
+       else {
             cardData.clear();
+        }
+
         presenter.loadData(cardTotal);
         cardTotal =Config.ONE_TIME_LOAD_NUMBER;
+
+    }
+
+    /***
+     *
+     *
+     */
+
+    private void hideFirstPageProgress() {
+
 
     }
 
