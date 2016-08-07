@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    tools:context="com.wyf.daike.MyInfo.MyInfoActivity">
+
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:background="@drawable/side_nav_bar"
+    android:layout_height="110dp">
+</LinearLayout>
+    <com.wyf.daike.Util.CircleImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageUser"
+        android:layout_marginTop="30dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/ly"
+        android:clickable="true"
+        app:border_width="2dp"
+        app:border_color="#ffffff"
+        />
+
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="200dp"
+
+        android:weightSum="1">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+
+            android:background="@drawable/select_btn_ripple_grey"
+            android:clickable="true"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="手    机"
+                android:layout_marginLeft="60dp"
+                android:textSize="20sp"
+                />
+            <TextView
+                android:layout_marginLeft="20dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="17712525660"
+                android:textSize="20sp"
+                android:id="@+id/textTel"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/select_btn_ripple_grey"
+            android:clickable="true"
+            >
+            <TextView
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="姓    名"
+                android:layout_marginLeft="60dp"
+                android:textSize="20sp"
+                />
+            <EditText
+                android:layout_marginLeft="20dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="啦啦啦"
+                android:background="@null"
+                android:editable="false"
+                android:textSize="20sp"
+                android:id="@+id/textPersonName"
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/select_btn_ripple_grey"
+            android:clickable="true"
+
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="支付宝"
+                android:layout_marginLeft="60dp"
+                android:textSize="20sp"
+                />
+            <EditText
+                android:id="@+id/editAliPay"
+                android:layout_marginLeft="20dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="17712525660"
+                android:background="@null"
+                android:textSize="20sp"
+
+                />
+
+        </LinearLayout>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="编辑"
+            android:id="@+id/btnEdit"
+            android:layout_below="@+id/linearLayout"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="right" />
+
+    </LinearLayout>
+
+</RelativeLayout>
