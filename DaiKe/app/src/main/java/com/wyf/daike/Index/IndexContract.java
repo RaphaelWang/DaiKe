@@ -1,7 +1,9 @@
 package com.wyf.daike.Index;
 
+import com.wyf.daike.Adapter.IndexAdapter;
 import com.wyf.daike.BaseView;
 import com.wyf.daike.BasePresenter;
+import com.wyf.daike.Bean.IndexCard;
 
 import java.util.List;
 
@@ -23,4 +25,10 @@ public interface IndexContract {
         public void loadFailed(int errorCode);
         public void loadMore();
     }
+    public interface LoadDetail
+    {
+        public  void load(String id);
+
+    }
+
 }
