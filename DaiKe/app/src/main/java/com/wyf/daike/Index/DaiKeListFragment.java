@@ -3,6 +3,7 @@ package com.wyf.daike.Index;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TabHost;
 import android.widget.Toast;
 
@@ -39,6 +41,7 @@ import java.util.jar.Manifest;
 public class DaiKeListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,IndexContract.View{
 
     Context mContext;
+
     IndexAdapter indexAdapter;
     public RecyclerView mRecyclerView;
     public SwipeRefreshLayout mSwipeRefreshLayout;
@@ -47,6 +50,7 @@ public class DaiKeListFragment extends Fragment implements SwipeRefreshLayout.On
     private   LinearLayoutManager manager;
     private static  int cardTotal=0;
     private boolean loadContentEmpty =true;
+    private   MainActivity mainActivity;
 
 
 
@@ -54,6 +58,7 @@ public class DaiKeListFragment extends Fragment implements SwipeRefreshLayout.On
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext=context;
+        mainActivity = (MainActivity)context;
 
     }
 
@@ -78,7 +83,7 @@ public class DaiKeListFragment extends Fragment implements SwipeRefreshLayout.On
     private void init() {
 
 
-        MainActivity mainActivity = (MainActivity) getActivity();
+
         mainActivity.setFloatingActionButton(true);
         mainActivity.setTitle("代课");
 
@@ -93,11 +98,33 @@ public class DaiKeListFragment extends Fragment implements SwipeRefreshLayout.On
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.addOnScrollListener(onScrollListener);
+
         cardData = new ArrayList<IndexCard>();
         indexAdapter =  new IndexAdapter(getActivity().getApplicationContext(),cardData);
+        indexAdapter.addItemOnClickListener(onItemClickListener);
         mRecyclerView.setAdapter(indexAdapter);
         new IndexPresenter(this);
     }
+
+    IndexAdapter.OnItemClickListener onItemClickListener =new IndexAdapter.OnItemClickListener() {
+        @Override
+        public void itemClick(View view, int postiton) {
+            IndexCard card = indexAdapter.getItem(postiton);
+            Bundle bundle = new Bundle();
+            bundle.putString("id",card.getObjectId());
+            DetailFragment detailFragmen = new DetailFragment();
+            detailFragmen.setArguments(bundle);
+            mainActivity.getSupportFragmentManager().beginTransaction()
+                    .addToBackStack(null)
+                    .replace( R.id.mainFrameLayout, detailFragmen,"DetailFragment")
+                    .commit();
+//           DaiKeListFragment daiKeListFragment= (DaiKeListFragment) mainActivity.getSupportFragmentManager()
+//                   .findFragmentByTag("DaiKeListFragment");
+//            mainActivity.getSupportFragmentManager().beginTransaction().hide(daiKeListFragment);
+        }
+    };
+
+
 
     /****
      * 监听上拉动作，上拉加载更多,
@@ -196,15 +223,8 @@ public class DaiKeListFragment extends Fragment implements SwipeRefreshLayout.On
 
     }
 
-    /***
-     *
-     *
-     */
-
-    private void hideFirstPageProgress() {
 
 
-    }
 
 
     @Override

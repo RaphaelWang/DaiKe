@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -31,6 +32,7 @@ public class IndexAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private final int  TYPE_FOOTER=1;
     private final int  TYPE_NO_MORE=2;
     private static boolean showFooter=true;
+    private OnItemClickListener mOnItemClickListener;
 
 
     public  boolean isShowFooter()
@@ -102,18 +104,32 @@ public class IndexAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     }
 
+    public  IndexCard getItem(int positon)
+    {
+        return  cardData==null?null:cardData.get(positon);
+    }
+
     @Override
     public int getItemCount() {
-//        if(cardData.size()==1)
-//        {
-//            return 0;
-//        }
 
         return showFooter?cardData.size()+1:cardData.size();
     }
 
 
-    public static class MyViewHolder  extends RecyclerView.ViewHolder{
+    public void   addItemOnClickListener(OnItemClickListener onItemClickListener)
+    {
+       mOnItemClickListener =  onItemClickListener;
+    }
+
+
+
+    public  interface OnItemClickListener
+    {
+        void itemClick(View view,int postiton);
+    }
+
+
+    public  class MyViewHolder  extends RecyclerView.ViewHolder implements View.OnClickListener{
         public View rootView;
         public CircleImageView cardImage;
         public TextView cardTitle;
@@ -131,15 +147,23 @@ public class IndexAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             this.cardClassroom = (TextView) rootView.findViewById(R.id.cardClassroom);
             this.cardTime = (TextView) rootView.findViewById(R.id.cardTime);
             this.cardMoney = (TextView) rootView.findViewById(R.id.cardMoney);
+             rootView.setOnClickListener(this);
         }
 
+
+        @Override
+        public void onClick(View v) {
+            if(mOnItemClickListener!=null)
+            {
+                mOnItemClickListener.itemClick(v,this.getPosition());
+            }
+        }
     }
 
     public  static  class  ItemFooter extends RecyclerView.ViewHolder {
         public ItemFooter(View itemView) {
             super(itemView);
         }
-
 
     }
 }

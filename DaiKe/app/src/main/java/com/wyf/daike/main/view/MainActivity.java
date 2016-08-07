@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity
      */
 
     public void switchDaiKeList() {
-          getSupportFragmentManager().beginTransaction().replace(R.id.mainFrameLayout,new DaiKeListFragment()).commit();
+          getSupportFragmentManager().beginTransaction().replace(R.id.mainFrameLayout,new DaiKeListFragment(),"DaiKeListFragment").commit();
 //          getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
