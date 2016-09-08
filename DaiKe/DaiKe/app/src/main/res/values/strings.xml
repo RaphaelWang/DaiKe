@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">代课</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_login">sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+
+    <string name="select_city">选择城市</string>
+    <string name="hot_city">热门城市</string>
+    <string name="located_city">定位城市</string>
+    <string name="hint_search_box">请输入城市名或拼音</string>
+    <string name="nothing_found">没有搜索结果~</string>
+    <string name="locating">正在定位…</string>
+    <string name="located_failed">定位失败</string>
+    <string name="title_activity_detail">DetailActivity</string>
+
+
+</resources>
