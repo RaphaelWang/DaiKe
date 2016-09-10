@@ -1,0 +1,46 @@
+package com.wyf.daike.AddDaiKe;
+
+import com.wyf.daike.Bean.DaiKeOrder;
+
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
+
+/**
+ * Created by Administrator on 2016/7/30.
+ */
+public class AddDaiKeModel implements AddDaiKeContract.Model{
+
+    private DaiKeOrder indexCard = new DaiKeOrder();
+    private boolean sendState;
+    private AddDaiKePresenter presenter;
+    AddDaiKeModel(AddDaiKePresenter presenter)
+    {
+        this.presenter = presenter;
+        presenter.setModel(this);
+    }
+
+
+    public void   sendDaiKeInfo(String subject, String classroom, String title, String price,int state) {
+        indexCard.setoClassroom(classroom);
+        indexCard.setoSubject(subject);
+        indexCard.setoTitle(title);
+        indexCard.setoPrice(price);
+        indexCard.setoOrderState(state);
+        indexCard.save(new SaveListener<String>() {
+            @Override
+            public void done(String s, BmobException e) {
+                if(e==null)
+                {
+                    sendState = true;
+                }
+            }
+        });
+    }
+
+
+    @Override
+    public void setData() {
+        presenter.setLoadData(sendState);
+
+    }
+}
