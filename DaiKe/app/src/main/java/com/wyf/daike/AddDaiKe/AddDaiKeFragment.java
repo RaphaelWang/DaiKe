@@ -1,17 +1,22 @@
 package com.wyf.daike.AddDaiKe;
 
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -23,7 +28,18 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.wyf.daike.R;
+import com.wyf.daike.Util.SharedPresferencesUtil;
 import com.wyf.daike.main.MainActivity;
+
+import org.apache.http.auth.NTCredentials;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobFile;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,7 +56,6 @@ public class AddDaiKeFragment extends Fragment implements AddDaiKeContract.View,
     private  MainActivity parentActivity;
     private AddDaiKeContract.Presenter presenter;
     private EditText editTakeData,editTakeTime;
-    private AlertDialog dialogTimePicker,dialogDataPicker;
     private String temp;
     private Toolbar toolbar;
 
@@ -69,49 +84,44 @@ public class AddDaiKeFragment extends Fragment implements AddDaiKeContract.View,
 
         initView(rootView);
         initEvent();
+        initActionBar();
 
         return rootView;
     }
 
+    private void initActionBar() {
+
+    }
+
     private void initEvent() {
+        // 获取日历对象
+        final Calendar calendar = Calendar.getInstance();
+        // 获取当前对应的年、月、日的信息
+        final int year = calendar.get(Calendar.YEAR);
+        final int month = calendar.get(Calendar.MONTH) + 1;
+        final int day = calendar.get(Calendar.DAY_OF_MONTH);
+        final int hour =calendar.get(Calendar.HOUR_OF_DAY);
+        final int minute = calendar.get(Calendar.MINUTE);
         editTakeData.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
 
                 if(hasFocus)
                 {
-                    if(dialogDataPicker==null)
-                    {
-                        View view = LayoutInflater.from(mContext).inflate(R.layout.widget_data_picker,null);
-                        final DatePicker datePicker = (DatePicker) view.findViewById(R.id.widgetDataPicker);
-                        dialogDataPicker = new AlertDialog.Builder(mContext)
-                                .setView(R.layout.widget_data_picker)
-                                .setTitle("请选择日期")
-                                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
 
-                                    }
-                                })
-                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        temp = ""+datePicker.getMonth()+datePicker.getDayOfMonth();
-                                        Log.d("wyf", "onClick: "+temp);
-                                        editTakeData.setText(temp);
-                                        dialogDataPicker.dismiss();
-                                    }
-                                })
-                                .create();
-                    }
-                    if(!dialogDataPicker.isShowing())
-                        dialogDataPicker.show();
+
+                    DatePickerDialog datePickerDialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                            editTakeData.setText("");
+                            editTakeData.setText(""+(monthOfYear+1)+"月"+dayOfMonth+"日");
+                        }
+                    },year,month,day);
+                    datePickerDialog.show();
 
                 }
             }
         });
-
-
 
         editTakeTime.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -119,42 +129,16 @@ public class AddDaiKeFragment extends Fragment implements AddDaiKeContract.View,
 
                 if(hasFocus)
                 {
-                    if(editTakeTime==null)
-                    {
-                        View view = LayoutInflater.from(mContext).inflate(R.layout.widget_time_picker,null);
-                        final TimePicker timePicker = (TimePicker) view.findViewById(R.id.widgetTimePicker);
-                        dialogDataPicker = new AlertDialog.Builder(mContext)
-                                .setView(R.layout.widget_data_picker)
-                                .setTitle("请选择日期")
-                                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
 
-                                    }
-                                })
-                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                       // temp =""+timePicker.getHour()+timePicker.getMinute();
-                                        timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
-                                            @Override
-                                            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                                                temp = ""+hourOfDay+"  "+minute;
-                                                Log.d("wyf", "onTimeChanged: "+temp);
-                                                editTakeTime.setText(temp);
-                                                dialogTimePicker.dismiss();
-
-                                            }
-                                        });
-                                        Log.d("wyf", "onClick: "+temp);
-                                    }
-                                })
-                                .create();
-                    }
-                    if(!dialogTimePicker.isShowing())
-                        dialogTimePicker.show();
-
-
+                    TimePickerDialog timePickerDialog = new
+                            TimePickerDialog(mContext, new TimePickerDialog.OnTimeSetListener() {
+                        @Override
+                        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                            editTakeTime.setText("");
+                          editTakeTime.setText(hourOfDay+"："+minute);
+                        }
+                    },hour,minute,false);
+                    timePickerDialog.show();
                 }
             }
         });
@@ -169,7 +153,6 @@ public class AddDaiKeFragment extends Fragment implements AddDaiKeContract.View,
 
     @Override
     public void setSendState(boolean sendStaete) {
-        this.sendState = sendState;
         new AddDaiKePresenter(new AddDaiKeFragment());
         if(sendState)
         {
@@ -189,9 +172,6 @@ public class AddDaiKeFragment extends Fragment implements AddDaiKeContract.View,
     }
 
     private void initView(View rootView) {
-//        parentActivity = (MainActivity ) getActivity();
-//        parentActivity.setFloatingActionButton(false);
-
         editTitle = (EditText) rootView.findViewById(R.id.editTitle);
         editSubject = (EditText) rootView.findViewById(R.id.editSubject);
         editPrice = (EditText) rootView.findViewById(R.id.editPrice);
@@ -234,9 +214,13 @@ public class AddDaiKeFragment extends Fragment implements AddDaiKeContract.View,
         String subject = editSubject.getText().toString();
         String money = editPrice.getText().toString();;
         String classroom = editClassroom.getText().toString();
-        presenter.sendDaiKeInfo(subject,classroom,title,money,0);
 
-        Snackbar.make(view,"发布成功",Snackbar.LENGTH_SHORT).show();
+        String img=(SharedPresferencesUtil.getData(mContext,"userImgUrl"));
+        presenter.sendDaiKeInfo(subject,classroom,title,money,
+                editTakeData.getText().toString()+editTakeTime.getText().toString(),
+                BmobUser.getCurrentUser().getUsername(),img,0);
+
+       Snackbar.make(view,"发布成功",Snackbar.LENGTH_SHORT).show();
 
     }
 
@@ -244,8 +228,6 @@ public class AddDaiKeFragment extends Fragment implements AddDaiKeContract.View,
 
     @Override
     public void onClick(View v) {
-
         submit(v);
-
     }
 }

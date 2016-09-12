@@ -1,9 +1,11 @@
 package com.wyf.daike.Bean;
 
 import java.io.ObjectInputStream;
+import java.util.List;
 import java.util.Set;
 
 import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.datatype.BmobFile;
 
 /**
  * Created by Administrator on 2016/9/9.
@@ -14,7 +16,8 @@ public class DaiKeOrder extends BmobObject{
     String oSubject;
     String oClassroom;
     String oPrice;
-    String oPromulgatorHeadRortrait; //发布人头像
+    String userImgUrl; //发布人头像
+    String usrName;
     String oPromulgatorAccount;  //发布人
     String ReceiverAccount;  // 代替上课的
     int oOrderState;   //交易状态  0：已发布  1：正在代课中   2：交易成功  3异常
@@ -27,6 +30,9 @@ public class DaiKeOrder extends BmobObject{
 //    public void setObjectId(String objectId) {
 //        this.objectId = objectId;
 //    }
+
+
+
 
     public void setoClassroom(String oClassroom) {
         this.oClassroom = oClassroom;
@@ -44,8 +50,12 @@ public class DaiKeOrder extends BmobObject{
         this.oPromulgatorAccount = oPromulgatorAccount;
     }
 
-    public void setoPromulgatorHeadpRortrait(String oPromulgatorHeadpRortrait) {
-        this.oPromulgatorHeadRortrait = oPromulgatorHeadpRortrait;
+    public void setUserImgUrl(String userImgUrl) {
+        this.userImgUrl = userImgUrl;
+    }
+
+    public String getUserImgUrl() {
+        return userImgUrl;
     }
 
     public void setoSchoolTime(String oSchoolTime) {
@@ -80,9 +90,6 @@ public class DaiKeOrder extends BmobObject{
         return oPromulgatorAccount;
     }
 
-    public String getoPromulgatorHeadpRortrait() {
-        return oPromulgatorHeadRortrait;
-    }
 
     public String getoSchoolTime() {
         return oSchoolTime;
@@ -99,4 +106,14 @@ public class DaiKeOrder extends BmobObject{
     public String getReceiverAccount() {
         return ReceiverAccount;
     }
+
+    public void setUsrName(String usrName) {
+        this.usrName = usrName;
+    }
+
+    public String getUsrName() {
+        return usrName;
+    }
+
+
 }

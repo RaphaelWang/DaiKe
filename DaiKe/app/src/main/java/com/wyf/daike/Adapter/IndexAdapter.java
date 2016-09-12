@@ -2,12 +2,14 @@ package com.wyf.daike.Adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.wyf.daike.Bean.DaiKeOrder;
 import com.wyf.daike.R;
 import com.wyf.daike.Util.CircleImageView;
@@ -85,9 +87,15 @@ public class IndexAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             ((MyViewHolder)holder).cardTitle.setText(indexCard.getoTitle());
             ((MyViewHolder)holder).cardClassroom.setText(indexCard.getoClassroom());
 
-            Glide.with(mContext).load(indexCard.getoPromulgatorHeadpRortrait()).
-                    placeholder(R.drawable.ic_image_loading)
-                    .error(R.mipmap.ic_launcher).into(((MyViewHolder)holder).cardImage);
+
+                Glide.with(mContext)
+                        .load(indexCard.getUserImgUrl())
+                        .placeholder(R.drawable.ic_image_loading)
+                        .error(R.drawable.ly)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(((MyViewHolder)holder).cardImage);
+
+
             ((MyViewHolder)holder).cardMoney.setText(indexCard.getoPrice());
             ((MyViewHolder)holder).cardSubject.setText(indexCard.getoSubject());
             ((MyViewHolder)holder).cardTime.setText(indexCard.getoSchoolTime());

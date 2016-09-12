@@ -20,8 +20,9 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
-
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:title="正在加载中"
+            >
             <ImageView
                 android:layout_gravity="center_horizontal"
                 android:src="@mipmap/bg_jqm"
@@ -36,7 +37,7 @@
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/AppTheme.PopupOverlay"
-                app:title="加载错误"
+
                 />
 
         </android.support.design.widget.CollapsingToolbarLayout>

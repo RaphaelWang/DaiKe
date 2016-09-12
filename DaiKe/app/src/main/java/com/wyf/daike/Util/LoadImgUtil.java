@@ -15,10 +15,10 @@ import rx.BackpressureOverflow;
 public class LoadImgUtil {
 
 
-    public  static  void loadImg(Context context, ImageView imageView,String url)
+    public  static  void loadImg(Context context, ImageView imageView,String url,int error)
     {
 
-        Glide.with(context).load(url).error(R.drawable.ly).diskCacheStrategy(DiskCacheStrategy.ALL).into(imageView);
+        Glide.with(context).load(url).error(error).diskCacheStrategy(DiskCacheStrategy.ALL).into(imageView);
 
     }
 }

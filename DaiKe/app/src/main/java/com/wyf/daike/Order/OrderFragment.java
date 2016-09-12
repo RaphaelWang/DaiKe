@@ -10,6 +10,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +57,7 @@ public class OrderFragment extends Fragment{
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_order, container, false);
         initView(view);
+        //initToggle();
         fm = getChildFragmentManager();
 
         initViewPager();
@@ -63,6 +66,14 @@ public class OrderFragment extends Fragment{
       //  if(tabList.get(0)!=null)
             fm.beginTransaction().show(tabList.get(0)).commit();
         return view;
+    }
+
+    private void initToggle() {
+        DrawerLayout drawer = (DrawerLayout)getActivity().findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle
+                (getActivity(), drawer, toolbar,  R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
     }
 
     private void initView(View view) {
@@ -126,5 +137,7 @@ public class OrderFragment extends Fragment{
             return tabIndicators.get(position);
         }
     }
+
+
 
 }

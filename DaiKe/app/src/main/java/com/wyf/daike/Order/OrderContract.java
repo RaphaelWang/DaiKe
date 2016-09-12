@@ -11,19 +11,20 @@ import java.util.List;
  */
 public interface OrderContract {
 
-    public interface View extends BaseView<Presenter>
+     interface View extends BaseView<Presenter>
     {
-        public void showProgress();
-        public void hideProgress();
-        public void onLoadDataSuccess(List<DaiKeOrder> orderList);
-        public void onLoadDataFail(String error);
+         void showProgress();
+         void hideProgress();
+         void onLoadDataSuccess(List<DaiKeOrder> orderList);
+         void onLoadDataFail(String error);
     }
 
 
-    public interface  Presenter extends BasePresenter
+     interface  Presenter extends BasePresenter
 
     {
-        public void loadData();
+         void loadData();
+         void loadOtherDaiMyLession();
 
     }
 

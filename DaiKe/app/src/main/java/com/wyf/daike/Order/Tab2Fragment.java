@@ -49,7 +49,7 @@ public class Tab2Fragment extends Fragment implements SwipeRefreshLayout.OnRefre
         new OrderPresenter(this);
         //加载数据
         showProgress();
-        presenter.loadData();
+        presenter.loadOtherDaiMyLession();
         return view;
     }
 
@@ -82,7 +82,7 @@ public class Tab2Fragment extends Fragment implements SwipeRefreshLayout.OnRefre
             mSwipeRefreshLayout.setRefreshing(true);
         }
         orderData.clear();
-        presenter.loadData();
+        presenter.loadOtherDaiMyLession();
     }
 
 
@@ -121,7 +121,6 @@ public class Tab2Fragment extends Fragment implements SwipeRefreshLayout.OnRefre
         {
             orderData.addAll(orderList);
             adapter.notifyDataSetChanged();
-
         }
     }
 

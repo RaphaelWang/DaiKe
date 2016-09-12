@@ -16,9 +16,10 @@ public class SharedPresferencesUtil {
     {
         SharedPreferences.Editor savaData =  context.getSharedPreferences("data",context.MODE_PRIVATE).edit();
         savaData.putString(key,value);
+        savaData.commit();
     }
 
-    public static  String   getData(Context context ,String key)
+    public static  String  getData(Context context ,String key)
 
     {
         SharedPreferences getData = context.getSharedPreferences("data",0);

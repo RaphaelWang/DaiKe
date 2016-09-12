@@ -2,6 +2,7 @@ package com.wyf.daike.main;
 
 import android.app.ActionBar;
 import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
@@ -9,9 +10,11 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -22,6 +25,7 @@ import android.widget.FrameLayout;
 import android.widget.TabHost;
 
 import com.wyf.daike.AddDaiKe.AddDaiKeFragment;
+import com.wyf.daike.Bean.MyUser;
 import com.wyf.daike.CityPicker.CityPickerActivity;
 import com.wyf.daike.Index.DaiKeListFragment;
 import com.wyf.daike.Login.LoginActivity;
@@ -30,6 +34,8 @@ import com.wyf.daike.Order.OrderContract;
 import com.wyf.daike.Order.OrderFragment;
 import com.wyf.daike.R;
 import com.wyf.daike.Util.CircleImageView;
+import com.wyf.daike.Util.LoadImgUtil;
+import com.wyf.daike.Util.SharedPresferencesUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -56,25 +62,19 @@ public class MainActivity extends AppCompatActivity
     private OrderFragment orderFragment;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        BmobUser myUser =  BmobUser.getCurrentUser();
+
         initView();
-//        initActionBar();
         mkdir();
         currentFragment(FRAGMENTENUM.DaiKeListFragment);
     }
 
-    /**
-     * 设置ActionBar
-     */
-//    private void initActionBar() {
-//         toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//        actionBar = getSupportActionBar();
-//    }
 
     /**
      * 初始化布局
@@ -83,6 +83,13 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+//        DrawerLayout drawer = (DrawerLayout)findViewById(R.id.drawer_layout);
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle
+//                (this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        drawer.setDrawerListener(toggle);
+//        toggle.syncState();
 
 
         View headerView = navigationView.inflateHeaderView(R.layout.nav_header_main);
@@ -138,23 +145,17 @@ public class MainActivity extends AppCompatActivity
                if(!orderFragment.isAdded())
                     fm.beginTransaction().add(R.id.mainFrameLayout,orderFragment,"OrderFragment").commit();
                fm.beginTransaction().show(orderFragment).commit();
-//               actionBar.setTitle("订单中心");
                fab.setVisibility(View.GONE);
                break;
            case DaiKeListFragment:
-//               actionBar.setDisplayHomeAsUpEnabled(false);
-//               actionBar.setDisplayShowHomeEnabled(false);
-//                initToggle();
-
+               fab.setVisibility(View.VISIBLE);
                if(null == daiKeListFragment)
                {
                    daiKeListFragment = DaiKeListFragment.newInstance();
                }
                if(!daiKeListFragment.isAdded())
-                    fm.beginTransaction().add(R.id.mainFrameLayout,daiKeListFragment,"DaiKeListFragment").addToBackStack("DaiKeListFragment").commit();
+                    fm.beginTransaction().add(R.id.mainFrameLayout,daiKeListFragment,"DaiKeListFragment").commit();
                fm.beginTransaction().show(daiKeListFragment).commit();
-//               actionBar.setTitle("代课");
-               fab.setVisibility(View.VISIBLE);
                break;
        }
     }
@@ -166,14 +167,13 @@ public class MainActivity extends AppCompatActivity
         {
             for(Fragment f:fragmentsList)
             {
-                if(f.isVisible())
+                if(f!=null&&f.isAdded()&&f.isVisible())
                 {
                     fm.beginTransaction().hide(f).commit();
                 }
             }
         }
     }
-
 
     @Override
     public void onBackPressed() {
@@ -183,12 +183,23 @@ public class MainActivity extends AppCompatActivity
         Log.d("wyf", "onBackPressed:----------- "+fm.getBackStackEntryCount());
         //currentFragment(fm.findFragmentByTag("DaiKeListFragment"));
 
+
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+            return;
         }
         else {
             super.onBackPressed();
         }
+
+        if(daiKeListFragment.isHidden())
+        {
+            currentFragment(FRAGMENTENUM.DaiKeListFragment);
+            return;
+        }else {
+            super.onBackPressed();
+        }
+
     }
 
     @Override
@@ -211,6 +222,7 @@ public class MainActivity extends AppCompatActivity
         }
         if (id == android.R.id.home)
         {
+
             currentFragment(FRAGMENTENUM.DaiKeListFragment);
             return true;
         }
@@ -227,7 +239,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_camera) {
             currentFragment(FRAGMENTENUM.DaiKeListFragment);
         } else if (id == R.id.nav_gallery) {
-            currentFragment(FRAGMENTENUM.OrderFragment);
+            tipLogin(FRAGMENTENUM.OrderFragment);
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
@@ -246,9 +258,11 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
+
+        BmobUser myUser = BmobUser.getCurrentUser();
         switch (v.getId()) {
             case R.id.fab:
-                BmobUser myUser =  BmobUser.getCurrentUser();
+
                 if (myUser== null) {
                     startActivity(new Intent(this, LoginActivity.class));
                     Snackbar.make(v,"请先登录",Snackbar.LENGTH_SHORT).show();
@@ -257,9 +271,42 @@ public class MainActivity extends AppCompatActivity
                 currentFragment(FRAGMENTENUM.AddDaiKeFragment);
                 break;
             case R.id.imageTouXiang:
-                startActivity(new Intent(this, MyInfoActivity.class));
+                if(myUser==null)
+                {
+                    AlertDialog loginDialog = new AlertDialog.Builder(this)
+                            .setTitle("请先登录")
+                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    return;
+                                }
+                            })
+                            .setPositiveButton("登录", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+
+                                }
+                            })
+                            .create();
+                    loginDialog.show();
+
+                }
+                else{
+                    startActivity(new Intent(this, MyInfoActivity.class));
+                }
+
                 break;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("TAG", "onResume: ");
+        LoadImgUtil.loadImg(this,circleImageView,SharedPresferencesUtil.getData(this,"userImgUrl"),R.drawable.ly);
+
     }
 
     public void  setFloatingActionButton(boolean state)
@@ -272,6 +319,35 @@ public class MainActivity extends AppCompatActivity
             fab.setVisibility(View.GONE);
         }
 
+    }
+    private void tipLogin(final FRAGMENTENUM frag)
+    {
+        BmobUser myUser = BmobUser.getCurrentUser();
+        if(myUser==null)
+        {
+            AlertDialog loginDialog = new AlertDialog.Builder(this)
+                    .setTitle("请先登录")
+                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            return;
+                        }
+                    })
+                    .setPositiveButton("登录", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            currentFragment(frag);
+
+                        }
+                    })
+                    .create();
+                    loginDialog.show();
+
+        }
+        else{
+            currentFragment(frag);
+        }
     }
 
 }

@@ -77,7 +77,9 @@ public class DaiKeListFragment extends Fragment implements SwipeRefreshLayout.On
         new IndexPresenter(this);
 
         init();
+
         initToolbar(view);
+        initToggle();
         showDialog();
         onRefresh();
         return view;
@@ -85,13 +87,11 @@ public class DaiKeListFragment extends Fragment implements SwipeRefreshLayout.On
 
     private void initToolbar(View view) {
         toolbar = (android.support.v7.widget.Toolbar) view.findViewById(R.id.toolbarIndex);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            toolbar.setTitle("首页");
-        }
+        toolbar.setTitle("首页");
+
 
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
     private void init() {
 
         mainActivity.setFloatingActionButton(true);
@@ -125,27 +125,16 @@ public class DaiKeListFragment extends Fragment implements SwipeRefreshLayout.On
             intent.putExtra("id",card.getObjectId());
             startActivity(intent);
 
-//            Bundle bundle = new Bundle();
-//            bundle.putString("id",card.getObjectId());
-//            DetailFragment detailFragmen = new DetailFragment();
-//            detailFragmen.setArguments(bundle);
-//            mainActivity.getSupportFragmentManager().beginTransaction()
-//                    .addToBackStack(null)
-//                    .replace( R.id.mainFrameLayout, detailFragmen,"DetailFragment")
-//                    .commit();
-//           DaiKeListFragment daiKeListFragment= (DaiKeListFragment) mainActivity.getSupportFragmentManager()
-//                   .findFragmentByTag("DaiKeListFragment");
-//            mainActivity.getSupportFragmentManager().beginTransaction().hide(daiKeListFragment);
         }
     };
-//
-//    private void initToggle() {
-//        DrawerLayout drawer = (DrawerLayout)getActivity().findViewById(R.id.drawer_layout);
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle
-//                (getActivity(), drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        drawer.setDrawerListener(toggle);
-//        toggle.syncState();
-//    }
+
+    private void initToggle() {
+        DrawerLayout drawer = (DrawerLayout)getActivity().findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle
+                (getActivity(), drawer, toolbar,R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+    }
 
 
 

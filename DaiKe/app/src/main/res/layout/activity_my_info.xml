@@ -7,26 +7,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
     tools:context="com.wyf.daike.MyInfo.MyInfoActivity">
-
-
     <View
         android:layout_width="match_parent"
         android:background="@drawable/side_nav_bar"
         android:layout_height="110dp"/>
 
-
     <com.wyf.daike.Util.CircleImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
         android:id="@+id/imageUser"
-        android:layout_marginTop="30dp"
-        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:src="@drawable/ly"
-        android:clickable="true"
+        android:layout_gravity="center"
         app:border_width="2dp"
+        android:clickable="true"
         app:border_color="#ffffff"
-        />
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="54dp"
+        android:scaleType="centerCrop"
 
+        />
 
 
     <LinearLayout

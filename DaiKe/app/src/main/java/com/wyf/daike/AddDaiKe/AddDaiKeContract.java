@@ -3,6 +3,10 @@ package com.wyf.daike.AddDaiKe;
 import com.wyf.daike.Base.BasePresenter;
 import com.wyf.daike.Base.BaseView;
 
+import java.util.List;
+
+import cn.bmob.v3.datatype.BmobFile;
+
 
 /**
  * Created by Administrator on 2016/7/30.
@@ -20,7 +24,8 @@ public interface AddDaiKeContract {
     }
     interface Presenter extends BasePresenter
     {
-        void sendDaiKeInfo(String subject,String classroom,String title,String price,int state);
+        void sendDaiKeInfo(String subject, String classroom, String title,
+                           String price, String schooltime, String promulgater , String imgTouXiang, int state);
         //void setModel(Model);
         
     }

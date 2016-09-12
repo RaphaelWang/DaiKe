@@ -41,8 +41,10 @@ import java.io.IOException;
 import java.net.URI;
 import java.security.PrivilegedAction;
 
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
 import cn.bmob.v3.socketio.callback.EventCallback;
 
@@ -65,6 +67,9 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
         setContentView(R.layout.activity_my_info);
         initView();
         init();
@@ -78,7 +83,8 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
         String path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/DaiKe";
         root = new File(path);
         //从本地加载立像
-        LoadImgUtil.loadImg(this,imageUser,root+"/touxiang.jpg");
+//        LoadImgUtil.loadImg(this,imageUser,root+"/"+BmobUser.getCurrentUser().getUsername()+".jpg");
+      //  LoadImgUtil.loadImg(this,SharedPresferencesUtil.getData(this,"userImgUrl"));
     }
 
     private void initView() {
@@ -88,7 +94,7 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
         textPersonName = (EditText) findViewById(R.id.textPersonName);
         editAliPay = (EditText) findViewById(R.id.editAliPay);
         btnEdit = (Button) findViewById(R.id.btnEdit);
-       // LoadImgUtil.loadImg(this,imageUser,SharedPresferencesUtil.getData(MyInfoActivity.this,"userImgUrl"));
+        LoadImgUtil.loadImg(this,imageUser,SharedPresferencesUtil.getData(this,"userImgUrl"),R.drawable.ly);
 //
 //        File f = new File(root,"touxiang.jpg");
 //        if(!f.exists())
@@ -163,10 +169,10 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
 
     private void openCamera() {
 
-        File file =new File(root,"touxiang.jpg");
+        File file =new File(root, BmobUser.getCurrentUser().getUsername()+".jpg");
 
         try {
-            if(file.exists())
+            if(file!=null&&file.exists())
             {
                 file.delete();
              }
@@ -178,7 +184,6 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT,userImageUri);
         startActivityForResult(intent,TAKE_PHOTO);
-
 
     }
 
@@ -233,6 +238,9 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
 
                     Log.d("TAG", "onActivityResult: ");
                 }
+                popWindow.dismiss();
+                LoadImgUtil.loadImg(this,imageUser,SharedPresferencesUtil.getData(this,"userImgUrl"),R.drawable.ly);
+
                 break;
 
             default:
@@ -303,9 +311,29 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
 
         // TODO validate success, do something
     }
+    private  void deleteFile()
+    {
+        BmobFile file = new BmobFile();
+        String filePath = SharedPresferencesUtil.getData(this,"userImgUrl");
+        if(!TextUtils.isEmpty(filePath))
+        {
+            file.setUrl(filePath);//此url是上传文件成功之后通过bmobFile.getUrl()方法获取的。
+            file.delete(new UpdateListener() {
 
+                @Override
+                public void done(BmobException e) {
+                    if(e==null){
+
+                    }else{
+                    }
+                }
+            });
+        }
+
+    }
     private void upLoadUserImg(Uri uri)
     {
+        deleteFile();
         final BmobFile bmobFile = new BmobFile(new File(userImageUri.getPath()));
         bmobFile.uploadblock(new UploadFileListener() {
 

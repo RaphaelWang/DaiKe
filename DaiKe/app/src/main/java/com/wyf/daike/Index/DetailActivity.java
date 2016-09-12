@@ -2,6 +2,7 @@ package com.wyf.daike.Index;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
@@ -24,6 +25,7 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 public class DetailActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -39,6 +41,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     private FloatingActionButton fab;
     private DaiKeOrder card;
     private NestedScrollView nestedScrollView;
+    private CollapsingToolbarLayout toolbarLayout;
     private ActionBar actionBar;
     private  String id;
     private static final String TAG = "DetailActivity";
@@ -54,14 +57,12 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         actionBar.setDisplayShowHomeEnabled(true);
 
         Intent intent = getIntent();
-        String id = intent.getStringExtra("id");
+         id = intent.getStringExtra("id");
         loadDetail(id);
         Log.d("wyf", "onCreate: 数据库id"+id);
-
     }
 
     public void loadDetail(String id)
-
     {
         BmobQuery<DaiKeOrder> bmobQuery = new BmobQuery<DaiKeOrder>();
         bmobQuery.getObject(id, new QueryListener<DaiKeOrder>() {
@@ -87,6 +88,8 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         actionBar.setTitle(card.getoTitle());
         textTakeClassTime.setText(card.getoSchoolTime());
         textFaBuTime.setText(card.getCreatedAt());
+        toolbarLayout.setTitle(card.getoTitle());
+
     }
 
     private void initView() {
@@ -100,7 +103,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         textTel = (TextView) findViewById(R.id.textTel);
         btnSubmit = (Button) findViewById(R.id.btnSubmit);
         nestedScrollView = (NestedScrollView) findViewById(R.id.nested);
-
+        toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -129,20 +132,17 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         DaiKeOrder order = new DaiKeOrder();
         order.setReceiverAccount(BmobUser.getCurrentUser().getUsername());
         order.setoOrderState(1);
-        order.save(new SaveListener<String>() {
+        order.update(id, new UpdateListener() {
             @Override
-            public void done(String s, BmobException e) {
+            public void done(BmobException e) {
                 Toast.makeText(DetailActivity.this, "代课成功", Toast.LENGTH_SHORT).show();
             }
         });
-
 
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-
         if(item.getItemId()==android.R.id.home)
         {
             finish();
