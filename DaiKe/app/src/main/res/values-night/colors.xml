@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1f2023</color>
+    <color name="colorPrimaryDark">#18181a</color>
+    <color name="colorAccent">#ff4081</color>
+
+
+
+    <color name="md_blue_800">#3b50ce</color>
+    <color name="md_transparent_white">#77fafafa</color>
+    <color name="md_skyblue_50">#e1f5fe</color>
+    <color name="md_skyblue_200">#81d4fa</color>
+    <color name="md_skyblue_300">#4fc3f7</color>
+    <color name="md_skyblue_900">#01579b</color>
+    <color name="md_teal_A700">#00bfa5</color>
+    <color name="sino_toolbar_color">#3c8dbc</color>
+    <color name="drawable_color_transparent_black">#44555555</color>
+    <color name="contents_text">#ff000000</color>
+    <color name="encode_view">#ffffffff</color>
+    <color name="possible_result_points">#c0ffbd21</color>
+    <color name="ripple_mateial_light">#33ffffff</color>
+    <color name="ripple_mateial_dark">#1f0000</color>
+
+
+    <color name="divider">#E5E5E5</color>
+    <color name="shadow">#AAEBEBEB</color>
+    <color name="common_bg">#FAFAFA</color>
+    <color name="content_bg">#F3F3F3</color>
+    <color name="gray">#8c8c8c</color>
+    <color name="gray_deep">#5c5c5c</color>
+    <color name="alpha_gray">#CC646464</color>
+    <color name="theme_gray">#646464</color>
+
+
+
+</resources>

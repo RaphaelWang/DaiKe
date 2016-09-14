@@ -16,12 +16,16 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
+import android.widget.Switch;
 import android.widget.TabHost;
 
 import com.wyf.daike.AddDaiKe.AddDaiKeFragment;
@@ -36,6 +40,7 @@ import com.wyf.daike.R;
 import com.wyf.daike.Util.CircleImageView;
 import com.wyf.daike.Util.LoadImgUtil;
 import com.wyf.daike.Util.SharedPresferencesUtil;
+import com.wyf.daike.common.Data;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,19 +65,65 @@ public class MainActivity extends AppCompatActivity
     private AddDaiKeFragment addDaiKeFragment;
     private DaiKeListFragment daiKeListFragment;
     private OrderFragment orderFragment;
+    private Switch switchNight;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //夜间开关
+
+        View v = LayoutInflater.from(this).inflate(R.layout.item_switch,null);
+        switchNight = (Switch) v.findViewById(R.id.switchNight);
+
+        boolean isNight = SharedPresferencesUtil.getNight(this, Data.KEY_SAVE_NIGHT);
+        if(isNight)
+        {
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }else {
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+        switchNight.setChecked(isNight);
+
         setContentView(R.layout.activity_main);
+
+
+
+
+
 
         BmobUser myUser =  BmobUser.getCurrentUser();
 
         initView();
+        initEvent();
         mkdir();
         currentFragment(FRAGMENTENUM.DaiKeListFragment);
+    }
+
+    private void initEvent() {
+        switchNight.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked)
+                {
+                    if(!isChecked)
+                    {
+                        getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                        switchNight.setChecked(false);
+                        recreate();
+                        SharedPresferencesUtil.setNight(MainActivity.this,Data.KEY_SAVE_NIGHT,false);
+
+                    }else {
+                        getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                        switchNight.setChecked(true);
+                        recreate();
+                        SharedPresferencesUtil.setNight(MainActivity.this,Data.KEY_SAVE_NIGHT,true);
+
+                    }
+                }
+            }
+        });
     }
 
 
@@ -102,6 +153,10 @@ public class MainActivity extends AppCompatActivity
         drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer_layout.setOnClickListener(this);
         circleImageView.setOnClickListener(this);
+
+
+
+
     }
 
     /**
@@ -222,7 +277,6 @@ public class MainActivity extends AppCompatActivity
         }
         if (id == android.R.id.home)
         {
-
             currentFragment(FRAGMENTENUM.DaiKeListFragment);
             return true;
         }
@@ -243,12 +297,34 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
-
+                darkNight();
         } else if (id == R.id.nav_share) {
             startActivity(new Intent(this, CityPickerActivity.class));
 
         } else if (id == R.id.nav_send) {
-
+            //退出登录
+            if(null != BmobUser.getCurrentUser())
+            {
+                AlertDialog loginDialog = new AlertDialog.Builder(this)
+                        .setTitle("退出登录")
+                        .setMessage("你真的要退出登录吗？")
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .setPositiveButton("退出", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                              BmobUser.logOut();
+                                startActivity(new Intent(MainActivity.this,LoginActivity.class));
+                                finish();
+                            }
+                        })
+                        .create();
+                loginDialog.show();
+            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -347,6 +423,27 @@ public class MainActivity extends AppCompatActivity
         }
         else{
             currentFragment(frag);
+        }
+    }
+
+    /**
+     * 进入夜间模式
+     */
+    private void darkNight()
+    {
+        if(switchNight.isChecked())
+        {
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            switchNight.setChecked(false);
+            recreate();
+            SharedPresferencesUtil.setNight(this,Data.KEY_SAVE_NIGHT,false);
+
+        }else {
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            switchNight.setChecked(true);
+            recreate();
+            SharedPresferencesUtil.setNight(this,Data.KEY_SAVE_NIGHT,true);
+
         }
     }
 
