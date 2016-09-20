@@ -7,26 +7,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
     tools:context="com.wyf.daike.MyInfo.MyInfoActivity">
-    <View
-        android:layout_width="match_parent"
-        android:background="@drawable/side_nav_bar"
-        android:layout_height="110dp"/>
 
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:background="@drawable/side_nav_bar"
+    android:layout_height="110dp">
+</LinearLayout>
     <com.wyf.daike.Util.CircleImageView
+        android:layout_width="110dp"
+        android:layout_height="110dp"
         android:id="@+id/imageUser"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ly"
-        android:layout_gravity="center"
-        app:border_width="2dp"
-        android:clickable="true"
-        app:border_color="#ffffff"
-        android:layout_alignParentTop="true"
+        android:layout_marginTop="40dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="54dp"
-        android:scaleType="centerCrop"
-
+        android:src="@drawable/ly"
+        android:clickable="true"
+        app:border_width="2dp"
+        app:border_color="#ffffff"
         />
+
 
 
     <LinearLayout
@@ -34,12 +33,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="200dp"
-
         android:weightSum="1">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
-
             android:background="@drawable/select_btn_ripple_grey"
             android:clickable="true"
             >
@@ -49,6 +46,7 @@
                 android:text="手    机"
                 android:layout_marginLeft="60dp"
                 android:textSize="20sp"
+                android:gravity="center_vertical"
                 />
             <TextView
                 android:layout_marginLeft="20dp"
@@ -58,6 +56,7 @@
                 android:text="17712525660"
                 android:textSize="20sp"
                 android:id="@+id/textTel"
+                android:gravity="center_vertical"
                 />
         </LinearLayout>
         <LinearLayout
@@ -75,6 +74,7 @@
                 android:text="姓    名"
                 android:layout_marginLeft="60dp"
                 android:textSize="20sp"
+                android:gravity="center_vertical"
                 />
             <EditText
                 android:layout_marginLeft="20dp"
@@ -86,6 +86,7 @@
                 android:editable="false"
                 android:textSize="20sp"
                 android:id="@+id/textPersonName"
+                android:gravity="center_vertical"
                 />
 
         </LinearLayout>
@@ -101,6 +102,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="支付宝"
+                android:gravity="center_vertical"
                 android:layout_marginLeft="60dp"
                 android:textSize="20sp"
                 />
@@ -111,22 +113,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="17712525660"
+                android:gravity="center_vertical"
                 android:background="@null"
                 android:textSize="20sp"
 
                 />
 
         </LinearLayout>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="编辑"
-            android:id="@+id/btnEdit"
-            android:layout_below="@+id/linearLayout"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_gravity="right" />
 
     </LinearLayout>
 

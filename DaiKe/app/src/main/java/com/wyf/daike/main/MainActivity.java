@@ -9,14 +9,17 @@ import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -65,7 +68,8 @@ public class MainActivity extends AppCompatActivity
     private AddDaiKeFragment addDaiKeFragment;
     private DaiKeListFragment daiKeListFragment;
     private OrderFragment orderFragment;
-    private Switch switchNight;
+    private SwitchCompat switchNight;
+    boolean isNight;
 
 
 
@@ -73,22 +77,14 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //夜间开关
-
-        View v = LayoutInflater.from(this).inflate(R.layout.item_switch,null);
-        switchNight = (Switch) v.findViewById(R.id.switchNight);
-
-        boolean isNight = SharedPresferencesUtil.getNight(this, Data.KEY_SAVE_NIGHT);
+        isNight = SharedPresferencesUtil.getNight(this, Data.KEY_SAVE_NIGHT);
         if(isNight)
         {
             getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }else {
             getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
-        switchNight.setChecked(isNight);
-
         setContentView(R.layout.activity_main);
-
-
 
 
 
@@ -98,30 +94,19 @@ public class MainActivity extends AppCompatActivity
         initView();
         initEvent();
         mkdir();
+        if(null != savedInstanceState)
+        {
+            hideFragment();
+        }
         currentFragment(FRAGMENTENUM.DaiKeListFragment);
     }
 
     private void initEvent() {
+
         switchNight.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked)
-                {
-                    if(!isChecked)
-                    {
-                        getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                        switchNight.setChecked(false);
-                        recreate();
-                        SharedPresferencesUtil.setNight(MainActivity.this,Data.KEY_SAVE_NIGHT,false);
-
-                    }else {
-                        getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                        switchNight.setChecked(true);
-                        recreate();
-                        SharedPresferencesUtil.setNight(MainActivity.this,Data.KEY_SAVE_NIGHT,true);
-
-                    }
-                }
+               darkNight();
             }
         });
     }
@@ -153,9 +138,8 @@ public class MainActivity extends AppCompatActivity
         drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer_layout.setOnClickListener(this);
         circleImageView.setOnClickListener(this);
-
-
-
+        switchNight = (SwitchCompat) navigationView.getMenu().getItem(3).getActionView();
+        switchNight.setChecked(isNight);
 
     }
 
@@ -204,12 +188,13 @@ public class MainActivity extends AppCompatActivity
                break;
            case DaiKeListFragment:
                fab.setVisibility(View.VISIBLE);
+
+               daiKeListFragment = (DaiKeListFragment) fm.findFragmentByTag("DaiKeListFragment");
                if(null == daiKeListFragment)
                {
                    daiKeListFragment = DaiKeListFragment.newInstance();
+                   fm.beginTransaction().add(R.id.mainFrameLayout,daiKeListFragment,"DaiKeListFragment").commit();
                }
-               if(!daiKeListFragment.isAdded())
-                    fm.beginTransaction().add(R.id.mainFrameLayout,daiKeListFragment,"DaiKeListFragment").commit();
                fm.beginTransaction().show(daiKeListFragment).commit();
                break;
        }
@@ -224,6 +209,7 @@ public class MainActivity extends AppCompatActivity
             {
                 if(f!=null&&f.isAdded()&&f.isVisible())
                 {
+
                     fm.beginTransaction().hide(f).commit();
                 }
             }
@@ -297,8 +283,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
-                darkNight();
-        } else if (id == R.id.nav_share) {
+                //darkNight();
+        }
+        else if (id == R.id.nav_share) {
             startActivity(new Intent(this, CityPickerActivity.class));
 
         } else if (id == R.id.nav_send) {
@@ -413,13 +400,11 @@ public class MainActivity extends AppCompatActivity
                     .setPositiveButton("登录", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            currentFragment(frag);
-
+                            startActivity(new Intent(MainActivity.this,LoginActivity.class));
                         }
                     })
                     .create();
                     loginDialog.show();
-
         }
         else{
             currentFragment(frag);
@@ -427,24 +412,23 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * 进入夜间模式
+     * 设置并保存夜间模式
      */
     private void darkNight()
     {
-        if(switchNight.isChecked())
+        isNight = SharedPresferencesUtil.getNight(this,Data.KEY_SAVE_NIGHT);
+        if(isNight)
         {
             getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            switchNight.setChecked(false);
             recreate();
-            SharedPresferencesUtil.setNight(this,Data.KEY_SAVE_NIGHT,false);
-
         }else {
             getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            switchNight.setChecked(true);
             recreate();
-            SharedPresferencesUtil.setNight(this,Data.KEY_SAVE_NIGHT,true);
-
         }
+        isNight = !isNight;
+        SharedPresferencesUtil.setNight(this,Data.KEY_SAVE_NIGHT,isNight);
+        switchNight.setChecked(isNight);
+        Log.d("TAG", "darkNight: ");
     }
 
 }

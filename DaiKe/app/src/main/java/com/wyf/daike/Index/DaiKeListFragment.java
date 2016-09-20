@@ -15,7 +15,9 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.Xml;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toolbar;
@@ -28,6 +30,8 @@ import com.wyf.daike.main.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.view.MotionEvent.ACTION_MOVE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -104,16 +108,20 @@ public class DaiKeListFragment extends Fragment implements SwipeRefreshLayout.On
 
         //设置RecyclerView
         manager = new LinearLayoutManager(mContext);
+        manager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.addOnScrollListener(onScrollListener);
 
+
         cardData = new ArrayList<DaiKeOrder>();
         indexAdapter =  new IndexAdapter(getActivity().getApplicationContext(),cardData);
         indexAdapter.addItemOnClickListener(onItemClickListener);
+        indexAdapter.setShowFooter(false);
         mRecyclerView.setAdapter(indexAdapter);
         new IndexPresenter(this);
+
     }
 
     IndexAdapter.OnItemClickListener onItemClickListener =new IndexAdapter.OnItemClickListener() {
@@ -149,14 +157,14 @@ public class DaiKeListFragment extends Fragment implements SwipeRefreshLayout.On
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
-            lastVisible = manager.findLastVisibleItemPosition();
+            if(indexAdapter.isShowFooter())
+                lastVisible = manager.findLastVisibleItemPosition();
 
         }
 
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
             super.onScrollStateChanged(recyclerView, newState);
-
 
             if(indexAdapter.isShowFooter()&&(newState==RecyclerView.SCROLL_STATE_IDLE)&&((lastVisible+1) ==
                     indexAdapter.getItemCount()))
@@ -166,11 +174,7 @@ public class DaiKeListFragment extends Fragment implements SwipeRefreshLayout.On
                 cardTotal+= Config.ONE_TIME_LOAD_NUMBER;
             }
         }
-
-
     };
-
-
 
     public void hideDialog() {
         mSwipeRefreshLayout.setRefreshing(false);
@@ -184,7 +188,6 @@ public class DaiKeListFragment extends Fragment implements SwipeRefreshLayout.On
     public void loadFailed(int code) {
 
     }
-
 
     /**
      *
@@ -218,6 +221,8 @@ public class DaiKeListFragment extends Fragment implements SwipeRefreshLayout.On
 
     @Override
     public void onRefresh() {
+
+
         cardTotal = 0;
 
         if(cardData.size()==0)
@@ -230,6 +235,7 @@ public class DaiKeListFragment extends Fragment implements SwipeRefreshLayout.On
         }
 
         indexAdapter.setShowFooter(false);
+
         presenter.loadData(cardTotal);
         cardTotal =Config.ONE_TIME_LOAD_NUMBER;
 

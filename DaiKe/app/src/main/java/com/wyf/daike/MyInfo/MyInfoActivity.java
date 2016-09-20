@@ -88,34 +88,20 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void initView() {
-        linearLayout = (LinearLayout) findViewById(R.id.linearLayout);
+
         imageUser = (CircleImageView) findViewById(R.id.imageUser);
         textTel = (TextView) findViewById(R.id.textTel);
         textPersonName = (EditText) findViewById(R.id.textPersonName);
         editAliPay = (EditText) findViewById(R.id.editAliPay);
-        btnEdit = (Button) findViewById(R.id.btnEdit);
+
         LoadImgUtil.loadImg(this,imageUser,SharedPresferencesUtil.getData(this,"userImgUrl"),R.drawable.ly);
-//
-//        File f = new File(root,"touxiang.jpg");
-//        if(!f.exists())
-//        {
-//
-//        }
-//        Bitmap bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory().getAbsolutePath()+"/touxiang.jpg");
-//
-//        imageUser.setImageBitmap(bitmap);
-
-
         imageUser.setOnClickListener(this);
-        btnEdit.setOnClickListener(this);
+
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btnEdit:
-
-                break;
             case R.id.imageUser:
                 Log.d("TAG", "onClick: ");
                 openPopWindow();
@@ -214,9 +200,11 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
                     if(userImageUri==null)
                     {
                         Bundle bundle = data.getExtras();
+
                         bitmap = (Bitmap) bundle.get("data");
 
-                        userImageUri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(),bitmap,null,null));
+                        if(bitmap!=null)
+                            userImageUri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(),bitmap,null,null));
 
                         imageUser.setImageBitmap(bitmap);
                         upLoadUserImg(userImageUri);

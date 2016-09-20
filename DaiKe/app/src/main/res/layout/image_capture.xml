@@ -11,7 +11,7 @@
     android:text="拍照"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-        android:background="#ffffff"
+        android:background="@color/encode_view"
 
     />
     <Button
@@ -19,7 +19,7 @@
         android:text="相册"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#ffffff"
+        android:background="@color/encode_view"
         android:layout_marginTop="2dp"
         />
 
@@ -29,7 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:background="#ffffff"
+        android:background="@color/encode_view"
         />
 
 

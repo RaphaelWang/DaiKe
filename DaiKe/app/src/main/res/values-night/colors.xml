@@ -16,7 +16,7 @@
     <color name="sino_toolbar_color">#3c8dbc</color>
     <color name="drawable_color_transparent_black">#44555555</color>
     <color name="contents_text">#ff000000</color>
-    <color name="encode_view">#ffffffff</color>
+    <color name="encode_view">#1f2023</color>
     <color name="possible_result_points">#c0ffbd21</color>
     <color name="ripple_mateial_light">#33ffffff</color>
     <color name="ripple_mateial_dark">#1f0000</color>

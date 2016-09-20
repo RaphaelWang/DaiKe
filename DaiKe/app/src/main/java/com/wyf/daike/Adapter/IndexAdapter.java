@@ -42,7 +42,7 @@ public class IndexAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public int getItemViewType(int position) {
 
-        if(position+1==getItemCount()&&showFooter)
+        if(position+1==getItemCount())
             return TYPE_FOOTER;
         return TYPE_ITEM;
     }
@@ -69,8 +69,6 @@ public class IndexAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardviewloading, parent, false);
             return  new ItemFooter(view);
         }
-
-
     }
 
     @Override
@@ -104,18 +102,19 @@ public class IndexAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public  DaiKeOrder getItem(int positon)
     {
-      // this.notifyDataSetChanged();
         return  cardData==null?null:cardData.get(positon);
     }
 
     @Override
     public int getItemCount() {
 
+        int begin = showFooter?1:0;
+
         if(cardData==null)
         {
-            return 1;
+            return begin;
         }
-        return showFooter?cardData.size()+1:cardData.size();
+        return cardData.size()+begin;
     }
 
 
@@ -123,8 +122,6 @@ public class IndexAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     {
        mOnItemClickListener =  onItemClickListener;
     }
-
-
 
     public  interface OnItemClickListener
     {
@@ -150,9 +147,8 @@ public class IndexAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             this.cardClassroom = (TextView) rootView.findViewById(R.id.cardClassroom);
             this.cardTime = (TextView) rootView.findViewById(R.id.cardTime);
             this.cardMoney = (TextView) rootView.findViewById(R.id.cardMoney);
-             rootView.setOnClickListener(this);
+            rootView.setOnClickListener(this);
         }
-
 
         @Override
         public void onClick(View v) {

@@ -20,7 +20,6 @@
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="消息"
-
             />
 
         <item
@@ -28,7 +27,6 @@
             android:icon="@drawable/ic_menu_manage"
             android:title="夜间模式"
             app:actionLayout="@layout/item_switch"
-
             >
 
         </item>

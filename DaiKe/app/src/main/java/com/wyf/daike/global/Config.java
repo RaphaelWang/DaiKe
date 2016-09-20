@@ -6,5 +6,5 @@ package com.wyf.daike.global;
 public class Config {
 
 
-    public  static  int ONE_TIME_LOAD_NUMBER=7;     //一次加载首页卡片的数量
+    public  static  int ONE_TIME_LOAD_NUMBER=10;     //一次加载首页卡片的数量
 }
